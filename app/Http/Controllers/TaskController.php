@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\Tag;
+use App\Models\Category;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 
@@ -14,6 +16,9 @@ class TaskController extends Controller
     public function index()
     {
         //
+        $tasks = Task::with(['category', 'tags'])->get();
+
+        return view('tasks.index', compact('tasks'));
     }
 
     /**
@@ -21,7 +26,10 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        $tags = Tag::all();
+
+        return view('tasks.create', compact('categories', 'tags'));
     }
 
     /**
@@ -29,7 +37,14 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        //
+           $task = Task::create($request->validated());
+
+        if ($request->filled('tags')) {
+            $task->tags()->sync($request->tags);
+        }
+
+        return redirect()->route('tasks.index')
+            ->with('success', 'Task created successfully.');
     }
 
     /**
@@ -37,7 +52,9 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        $task->load(['category', 'tags']);
+
+        return view('tasks.show', compact('task'));
     }
 
     /**
@@ -45,7 +62,12 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+        $categories = Category::all();
+        $tags = Tag::all();
+
+        $task->load('tags');
+
+        return view('tasks.edit', compact('task', 'categories', 'tags'));
     }
 
     /**
@@ -53,7 +75,12 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        //
+         $task->update($request->validated());
+
+        $task->tags()->sync($request->tags ?? []);
+
+        return redirect()->route('tasks.index')
+            ->with('success', 'Task updated successfully.');
     }
 
     /**
@@ -61,6 +88,9 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+          $task->delete();
+
+        return redirect()->route('tasks.index')
+            ->with('success', 'Task deleted successfully.');
     }
 }
