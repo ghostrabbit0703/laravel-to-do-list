@@ -52,6 +52,10 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        if ($task->trashed()) {
+            return redirect()->route('tasks.index')
+                             ->with('error', 'Task not found.');
+        }
         $task->load(['category', 'tags']);
 
         return view('tasks.show', compact('task'));
@@ -62,6 +66,10 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
+        if ($task->trashed()) {
+            return redirect()->route('tasks.index')
+                             ->with('error', 'Cannot edit a deleted task.');
+        }
         $categories = Category::all();
         $tags = Tag::all();
 
@@ -75,7 +83,12 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-         $task->update($request->validated());
+
+        if ($task->trashed()) {
+        return redirect()->route('tasks.index')
+                ->with('error', 'Cannot update a deleted task.');
+        }
+        $task->update($request->validated());
 
         $task->tags()->sync($request->tags ?? []);
 
@@ -88,7 +101,12 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-          $task->delete();
+        if ($task->trashed()) {
+        return redirect()->route('tasks.index')
+            ->with('error', 'This task is already deleted.');
+        }
+
+        $task->delete();
 
         return redirect()->route('tasks.index')
             ->with('success', 'Task deleted successfully.');
