@@ -18,6 +18,8 @@
                         <th>ID</th>
                         <th>Título</th>
                         <th>Descripción</th>
+                        <th>Categoría</th>
+                        <th>Etiquetas</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
@@ -28,6 +30,18 @@
                             <td>{{ $task->id }}</td>
                             <td>{{ $task->title }}</td>
                             <td>{{ $task->description }}</td>
+                            <td>{{ $task->category->name ?? 'Sin categoría' }}</td>
+                            <td>
+                                @forelse($task->tags as $tag)
+                                    <span class="badge bg-primary">
+                                        {{ $tag->name }}
+                                    </span>
+                                @empty
+                                    <span class="text-muted">
+                                        Sin etiquetas
+                                    </span>
+                                @endforelse
+                            </td>
                             <td>{{ $task->completed ? 'Completada' : 'Pendiente' }}</td>
                             <td>
                                 <a href="{{ route('tasks.show', $task) }}" class="btn btn-sm btn-info">Ver</a>
