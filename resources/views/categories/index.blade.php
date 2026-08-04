@@ -5,8 +5,8 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            <h1 class="mb-4">Lista de Tareas</h1>
-            <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">+ Crear Tarea</a>
+            <h1 class="mb-4">Lista de Categorias</h1>
+            <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">+ Crear Categoria</a>
 
             @if(session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
