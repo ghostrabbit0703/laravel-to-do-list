@@ -35,8 +35,7 @@
             </div>
         </div>
     </nav>
-
-    {{-- CONTENIDO PRINCIPAL --}}
+    
     <div class="container mt-5 pt-5">
         @yield('content')
     </div>
