@@ -39,6 +39,10 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
+        if ($tag->trashed()) {
+            return redirect()->route('tags.index')
+                ->with('error', 'The tag is not available.');
+        }
         return view('tags.show', compact('tag'));
     }
 
@@ -47,6 +51,10 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
+        if ($tag->trashed()) {
+            return redirect()->route('tags.index')
+                ->with('error', 'You cannot edit a deleted tag.');
+        }
         return view('tags.edit', compact('tag'));
     }
 
@@ -55,6 +63,11 @@ class TagController extends Controller
      */
     public function update(UpdateTagRequest $request, Tag $tag)
     {
+        if ($tag->trashed()) {
+            return redirect()->route('tags.index')
+                ->with('error', 'A deleted tag cannot be updated.');
+        }
+
         $tag->update($request->validated());
         return redirect()->route('tags.index')->with('success', 'Tag updated successfully.');
     }
@@ -64,6 +77,10 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
+        if ($tag->trashed()) {
+            return redirect()->route('tags.index')
+                             ->with('error', 'This tag has already been removed.');
+        }
         $tag->delete();
         return redirect()->route('tags.index')->with('success', 'Tag deleted successfully.');
     }

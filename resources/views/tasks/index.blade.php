@@ -17,6 +17,8 @@
                     <tr>
                         <th>ID</th>
                         <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -25,6 +27,8 @@
                         <tr>
                             <td>{{ $task->id }}</td>
                             <td>{{ $task->title }}</td>
+                            <td>{{ $task->description }}</td>
+                            <td>{{ $task->completed ? 'Completada' : 'Pendiente' }}</td>
                             <td>
                                 <a href="{{ route('tasks.show', $task) }}" class="btn btn-sm btn-info">Ver</a>
                                 <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-warning">Editar</a>

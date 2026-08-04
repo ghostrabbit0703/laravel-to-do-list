@@ -41,7 +41,10 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        if ($category->trashed()) {
+            return redirect()->route('categories.index')
+                             ->with('error', 'The category is not available.');
+        }
         return view('categories.show', compact('category'));
     }
 
@@ -50,7 +53,10 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        if ($category->trashed()) {
+            return redirect()->route('categories.index')
+                             ->with('error', 'You cannot edit a deleted category.');
+        }
         return view('categories.edit', compact('category'));
     }
 
@@ -59,7 +65,10 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        if ($category->trashed()) {
+            return redirect()->route('categories.index')
+                ->with('error', 'You cannot update a deleted category.');
+        }
         $category->update($request->validated());
         return redirect()->route('categories.index')->with('success', 'category updated successfully.');
     }
@@ -69,10 +78,13 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        if ($category->trashed()) {
+            return redirect()->route('categories.index')
+                             ->with('error', 'This category has already been eliminated.');
+        }
         $category->delete();
 
         return redirect()->route('categories.index')
-                         ->with('success', 'Categoría eliminada exitosamente.');
+                         ->with('success', 'Category successfully removed.');
     }
 }
