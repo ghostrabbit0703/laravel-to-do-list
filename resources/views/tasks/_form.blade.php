@@ -51,7 +51,7 @@
     @enderror
 </div>
 
-<div class="mb-3">
+{{-- <div class="mb-3">
     <label class="form-label">Etiquetas</label>
 
     @foreach($tags as $tag)
@@ -90,8 +90,50 @@
     @error('tags')
         <div class="text-danger">{{ $message }}</div>
     @enderror
-</div>
+</div> --}}
+<div class="mb-3">
 
+    <label for="tags" class="form-label">
+        Etiquetas
+    </label>
+
+    <select
+        name="tags[]"
+        id="tags"
+        class="form-select"
+        multiple
+    >
+
+        @foreach($tags as $tag)
+
+            <option
+                value="{{ $tag->id }}"
+                @selected(
+                    in_array(
+                        $tag->id,
+                        old(
+                            'tags',
+                            isset($task)
+                                ? $task->tags->pluck('id')->toArray()
+                                : []
+                        )
+                    )
+                )
+            >
+                {{ $tag->name }}
+            </option>
+
+        @endforeach
+
+    </select>
+
+    @error('tags')
+        <div class="text-danger">
+            {{ $message }}
+        </div>
+    @enderror
+
+</div>
 <div class="mb-3">
       <label class="form-label">Completar tarea</label>
     <div class="form-check">
@@ -113,3 +155,11 @@
     </div>
 
 </div>
+<script>
+    new TomSelect('#tags', {
+        plugins: ['remove_button'],
+        maxItems: null,
+        create: false,
+        placeholder: 'Selecciona las etiquetas...'
+    });
+</script>
