@@ -28,21 +28,61 @@
                     @forelse($tasks as $task)
                         <tr>
                             <td>{{ $task->id }}</td>
-                            <td>{{ $task->title }}</td>
-                            <td>{{ $task->description }}</td>
-                            <td>{{ $task->category->name ?? 'Sin categoría' }}</td>
+                            {{-- <td>{{ $task->title }}</td> --}}
                             <td>
-                                @forelse($task->tags as $tag)
-                                    <span class="badge bg-primary">
-                                        {{ $tag->name }}
-                                    </span>
-                                @empty
-                                    <span class="text-muted">
-                                        Sin etiquetas
-                                    </span>
-                                @endforelse
+                                <div class="task-title" title="{{ $task->title }}">
+                                    {{ $task->title }}
+                                </div>
                             </td>
-                            <td>{{ $task->completed ? 'Completada' : 'Pendiente' }}</td>
+                            <td>
+                                <div class="task-description" title="{{ $task->description }}">
+                                    {{ $task->description }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="task-category" title="{{ $task->category->name ?? 'Sin categoría' }}">
+                                    {{ $task->category->name ?? 'Sin categoría' }}
+                                </div>
+                            </td>
+
+                           <td>
+                                <div class="task-tags">
+                                    @forelse($task->tags as $tag)
+                                        @if($loop->index < 3)
+                                            <span class="badge bg-primary">
+                                                {{ $tag->name }}
+                                            </span>
+                                        @endif
+                                    @empty
+                                        <span class="text-muted">
+                                            Sin etiquetas
+                                        </span>
+                                    @endforelse
+                                    @if($task->tags->count() > 3)
+                                        <span class="badge bg-secondary">
+                                            +{{ $task->tags->count() - 3 }}
+                                        </span>
+                                    @endif
+
+                                </div>
+                            </td>
+                            <td>
+                                <form action="{{ route('tasks.toggle', $task) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+
+                                    @if($task->completed)
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            Completada
+                                        </button>
+                                    @else
+                                        <button type="submit" class="btn btn-warning btn-sm">
+                                            Pendiente
+                                        </button>
+                                    @endif
+
+                                </form>
+                            </td>
                             <td>
                                 <a href="{{ route('tasks.show', $task) }}" class="btn btn-sm btn-info">Ver</a>
                                 <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-warning">Editar</a>

@@ -8,6 +8,8 @@ use App\Http\Controllers\TagController;
 Route::resource('categories', CategoryController::class);
 Route::resource('tags', TagController::class);
 Route::resource('tasks', TaskController::class);
+Route::patch('/tasks/{task}/toggle', [TaskController::class, 'toggleCompleted'])
+    ->name('tasks.toggle');
 
 Route::get('/', function () {
     return view('layout.app');
