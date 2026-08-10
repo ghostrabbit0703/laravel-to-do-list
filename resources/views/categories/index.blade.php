@@ -3,46 +3,90 @@
 @section('title', 'Lista de Categorias')
 
 @section('content')
-    <div class="row">
-        <div class="col-12">
-            <h1 class="mb-4">Lista de Categorias</h1>
-            <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">+ Crear Categoria</a>
+    <div class="card shadow-sm">
+
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Lista de Categorías</h5>
+
+            <a href="{{ route('categories.create') }}"
+            class="btn btn-primary">
+                + Crear Categoría
+            </a>
+        </div>
+        <div class="card-body">
 
             @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
             @endif
-
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($categories as $category)
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
                         <tr>
-                            <td>{{ $category->id }}</td>
-                            <td>{{ $category->name }}</td>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($categories as $category)
 
-                            <td>
-                                <a href="{{ route('categories.show', $category) }}" class="btn btn-sm btn-info">Ver</a>
-                                <a href="{{ route('categories.edit', $category) }}" class="btn btn-sm btn-warning">Editar</a>
-                                <form action="{{ route('categories.destroy', $category) }}" method="POST" style="display:inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar esta tarea?')">Eliminar</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="3" class="text-center">No hay tareas registradas</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                            <tr>
+                                <td>{{ $category->id }}</td>
+                                <td>
+                                    {{ $category->name }}
+                                </td>
+                                <td class="text-end">
+                                    <a href="{{ route('categories.show', $category) }}"
+                                    class="btn btn-sm btn-info">
+                                        Ver
+                                    </a>
+                                    <a href="{{ route('categories.edit', $category) }}"
+                                    class="btn btn-sm btn-warning">
+                                        Editar
+                                    </a>
+                                    <form
+                                        action="{{ route('categories.destroy', $category) }}"
+                                        method="POST"
+                                        class="d-inline"
+                                    >
+                                        @csrf
+                                        @method('DELETE')
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="return confirm('¿Eliminar esta categoría?')"
+                                        >
+                                            Eliminar
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="text-center py-4">
+                                    No hay categorías registradas.
+                                </td>
+                            </tr>
+
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <small class="text-muted">
+                    Mostrando {{ $categories->firstItem() ?? 0 }} -
+                    {{ $categories->lastItem() ?? 0 }} de
+                    {{ $categories->total() }} categorías
+                </small>
+                <div>
+                    {{ $categories->onEachSide(1)->links('pagination::bootstrap-5') }}
+                </div>
+            </div>
+
         </div>
+
     </div>
 @endsection
