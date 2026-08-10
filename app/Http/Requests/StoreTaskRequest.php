@@ -33,4 +33,16 @@ class StoreTaskRequest extends FormRequest
             'completed' => ['boolean'],
         ];
     }
+    public function messages(): array
+    {
+        return [
+            'title.required' => 'The title field is required.',
+            'title.string' => 'The title must be a string.',
+            'title.max' => 'The title may not be greater than 255 characters.',
+            'description.string' => 'The description must be a string.',
+            'category_id.integer' => 'The category ID must be an integer.',
+            'category_id.exists' => 'The selected category does not exist or has been deleted.',
+            'completed.boolean' => 'The completed field must be true or false.',
+        ];
+    }
 }
