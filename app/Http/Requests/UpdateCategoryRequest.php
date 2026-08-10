@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Validation\Rule;
 class UpdateCategoryRequest extends FormRequest
 {
     /**
@@ -23,8 +23,16 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:categories,name,' . $this->route('category')->id,
+            'name' => ['required', 'string', 'max:255',  Rule::unique('categories', 'name')->ignore($this->category->id)],
             //
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'El nombre de la categoría es obligatorio.',
+            'name.unique' => 'Esta categoría ya existe. Por favor, elige otro nombre.',
+            'name.max' => 'El nombre no puede tener más de 255 caracteres.',
         ];
     }
 }

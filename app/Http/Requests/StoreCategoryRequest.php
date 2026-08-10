@@ -23,8 +23,16 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','string','max:255']
+            'name' => ['required','string','max:255','unique:categories,name']
             //
+        ];
+    }
+     public function messages(): array
+    {
+        return [
+            'name.required' => 'El nombre de la categoría es obligatorio.',
+            'name.unique' => 'Esta categoría ya existe. Por favor, elige otro nombre.',
+            'name.max' => 'El nombre no puede tener más de 255 caracteres.',
         ];
     }
 }

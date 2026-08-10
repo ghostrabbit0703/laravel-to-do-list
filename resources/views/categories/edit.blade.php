@@ -7,7 +7,7 @@
     <div class="col-md-6 mx-auto">
 
         <h1 class="mb-4">Editar Categoría</h1>
-
+      
         <form action="{{ route('categories.update', $category) }}" method="POST">
             @csrf
             @method('PUT')
