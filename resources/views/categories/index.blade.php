@@ -4,10 +4,8 @@
 
 @section('content')
     <div class="card shadow-sm">
-
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Lista de Categorías</h5>
-
             <a href="{{ route('categories.create') }}"
             class="btn btn-primary">
                 + Crear Categoría
@@ -20,7 +18,7 @@
                     {{ session('success') }}
                 </div>
             @endif
-            <div class="table-responsive">
+            <div >
                 <table class="table table-striped table-hover align-middle">
                     <thead>
                         <tr>
@@ -35,7 +33,9 @@
                             <tr>
                                 <td>{{ $category->id }}</td>
                                 <td>
-                                    {{ $category->name }}
+                                    <div class="task-title" title="{{ $category->name }}">
+                                        {{ $category->name }}
+                                    </div>
                                 </td>
                                 <td class="text-end">
                                     <a href="{{ route('categories.show', $category) }}"

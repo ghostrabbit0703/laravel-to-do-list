@@ -27,7 +27,11 @@
                         @forelse($tags as $tag)
                             <tr>
                                 <td>{{ $tag->id }}</td>
-                                <td>{{ $tag->name }}</td>
+                                <td>
+                                    <div class="task-title" title="{{ $tag->name }}">
+                                        {{ $tag->name }}
+                                    </div>
+                                </td>
                                 <td class="text-end">
                                     <a href="{{ route('tags.show', $tag) }}" class="btn btn-sm btn-info">Ver</a>
                                     <a href="{{ route('tags.edit', $tag) }}" class="btn btn-sm btn-warning">Editar</a>
