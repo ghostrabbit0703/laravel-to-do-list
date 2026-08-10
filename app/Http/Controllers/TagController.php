@@ -13,7 +13,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::whereNull('deleted_at')->get();
+        $tags = Tag::whereNull('deleted_at')->paginate(10);
         return view('tags.index', compact('tags'));
     }
 
