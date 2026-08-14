@@ -6,17 +6,22 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\AuthController;
 
-Route::apiResource('categories', CategoryController::class)
-    ->names('api.categories');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::apiResource('tags', TagController::class)
-    ->names('api.tags');
 
-route::apiResource('tasks', TaskController::class)
-    ->names('api.tasks');
+Route::middleware('auth:sanctum')->group(function () {
 
-/* Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
- */
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::apiResource('categories', CategoryController::class)
+        ->names('api.categories');
+
+    Route::apiResource('tags', TagController::class)
+        ->names('api.tags');
+
+    Route::apiResource('tasks', TaskController::class)
+        ->names('api.tasks');
+});
